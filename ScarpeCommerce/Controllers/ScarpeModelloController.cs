@@ -37,23 +37,38 @@ namespace ScarpeCommerce.Controllers
                 conn.Open();
 
                 // Salvataggio delle immagini sul server
-                if (Copertina != null && Copertina.ContentLength > 0)
+                if (Copertina != null && Copertina.ContentLength > 0) //errore qui
                 {
-                    string _File = Path.GetFileName(Copertina.FileName);
-                    string _path = Path.Combine(Server.MapPath("~/UploadedFiles"), _File);
-                    Copertina.SaveAs(_path);
+                    string _Copertina = Path.GetFileName(Copertina.FileName);
+                    string _path = Path.Combine(Server.MapPath("~/UploadedFiles"), _Copertina);
                     
+                    Copertina.SaveAs(_path);  // STO SALVANDO IL FILE DENTRO LA CARTELLA               
                 }
 
-                
-                string query = "INSERT INTO Scarpe (Nome, Descrizione , Copertina, Prezzo, Imm1, Imm2, Disponibile) " +
-                               "VALUES (@NomeProdotto, @Prezzo, @DescrizioneDettagliata, @Copertina, @AltreImg1, @AltreImg2, @Disponibile)";
+
+                if (AltreImg1 != null && AltreImg1.ContentLength > 0)
+                {
+                    string _AltreImg1 = Path.GetFileName(AltreImg1.FileName);
+                    string _path = Path.Combine(Server.MapPath("~/UploadedFiles"), _AltreImg1);
+                    AltreImg1.SaveAs(_path);
+
+                }
+
+                if (AltreImg2 != null && AltreImg2.ContentLength > 0)
+                {
+                    string _AltreImg2 = Path.GetFileName(AltreImg2.FileName);
+                    string _path = Path.Combine(Server.MapPath("~/UploadedFiles"), _AltreImg2);
+                    AltreImg2.SaveAs(_path);
+                }
+                string query = "INSERT INTO Scarpe  (Nome, Descrizione , Copertina, Prezzo, Imm1, Imm2, Disponibile) VALUES ( @NomeProdotto, @DescrizioneDettagliata, @Copertina, @Prezzo, @AltreImg1, @AltreImg2, @Disponibile)";
+
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@NomeProdotto", model.Nome);
-                cmd.Parameters.AddWithValue("@Prezzo", model.Prezzo);
                 cmd.Parameters.AddWithValue("@DescrizioneDettagliata", model.Descrizione);
-                cmd.Parameters.AddWithValue("@Copertina", model.Copertina);
-           
+                cmd.Parameters.AddWithValue("@Copertina", model.Copertina);             
+                cmd.Parameters.AddWithValue("@Prezzo", model.Prezzo);
+                cmd.Parameters.AddWithValue("@AltreImg1", model.AltreImg1File);
+                cmd.Parameters.AddWithValue("@AltreImg2", model.AltreImg2File);
                 cmd.Parameters.AddWithValue("@Disponibile", model.Disponibile);
 
                 cmd.ExecuteNonQuery();
@@ -61,7 +76,7 @@ namespace ScarpeCommerce.Controllers
             catch (SqlException ex)
             {
                 System.Diagnostics.Debug.WriteLine("Errore nella richiesta SQL");
-                ViewBag.Message = "Si è verificato un errore di connessione durante l'inserimento: " + ex.Message;
+                return View(ex.Message);
             }
             finally
             {

@@ -7,23 +7,26 @@ namespace ScarpeCommerce.Models
 {
     public class ScarpeModello
     {
-        public int ID_Prodotto { get; set; }
         public string Nome { get; set; }
         public string Descrizione { get; set; }
      
-        public HttpPostedFileBase Copertina { get; set; }
-        public string Prezzo { get; set; }
-   
-        public HttpPostedFileBase AltreImg1File { get; set; }
-        public HttpPostedFileBase AltreImg2File { get; set; }
+        public string Copertina { get; set; }
+        public decimal Prezzo { get; set; }
+
+        public string AltreImg1File { get; set; }
+        public string AltreImg2File { get; set; }
 
         public bool Disponibile { get; set; }
 
+
+
         public ScarpeModello() { }
 
-       public ScarpeModello(int iD_Prodotto, string nome, string descrizione, HttpPostedFileBase copertina, string prezzo, HttpPostedFileBase altreImg1File, HttpPostedFileBase altreImg2File, bool disponibile)
+
+
+       public ScarpeModello(string nome, string descrizione, string copertina, decimal prezzo, string altreImg1File, string altreImg2File, bool disponibile)
         {
-            ID_Prodotto = iD_Prodotto;
+           
             Nome = nome;
             Descrizione = descrizione;
             Copertina = copertina;
